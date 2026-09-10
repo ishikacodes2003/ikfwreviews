@@ -7,15 +7,47 @@ import { eq, and, gt } from "drizzle-orm";
 import { getDb } from "@/db";
 import { sessions, userRoles, users } from "@/db/schema";
 
+import { getAdminCredentials } from "@/lib/auth/admin";
+
 export type AppUser = { id: string; name: string; email: string; emailVerified: boolean; image: string | null };
 export const SESSION_COOKIE = "ikfw_session";
 const SESSION_DAYS = 30;
+
+interface MemorySession {
+  user: AppUser;
+  role: "user" | "admin";
+  expiresAt: Date;
+}
+
+const memorySessions = new Map<string, MemorySession>();
+
+export function setMemorySession(sessionId: string, user: AppUser, role: "user" | "admin", expiresAt: Date) {
+  memorySessions.set(sessionId, { user, role, expiresAt });
+}
+
+export function deleteMemorySession(sessionId: string) {
+  memorySessions.delete(sessionId);
+}
+
+export function getMemorySession(sessionId: string): MemorySession | null {
+  const session = memorySessions.get(sessionId);
+  if (!session) return null;
+  if (session.expiresAt.getTime() < Date.now()) {
+    memorySessions.delete(sessionId);
+    return null;
+  }
+  return session;
+}
 
 export async function getCurrentUser(): Promise<AppUser | null> {
   try {
     const cookieStore = await cookies();
     const sessionId = cookieStore.get(SESSION_COOKIE)?.value;
     if (!sessionId) return null;
+
+    const mem = getMemorySession(sessionId);
+    if (mem) return mem.user;
+
     const db = getDb();
     if (!db) return null;
     const [row] = await db
@@ -33,8 +65,25 @@ export async function getCurrentUser(): Promise<AppUser | null> {
 
 export async function getUserRole(userId: string): Promise<"user" | "admin"> {
   try {
+    for (const session of memorySessions.values()) {
+      if (session.user.id === userId && session.expiresAt.getTime() > Date.now()) {
+        return session.role;
+      }
+    }
+
+    const { email: adminEmail } = getAdminCredentials();
     const db = getDb();
-    if (!db) return "user";
+    if (!db) {
+      return userId === "admin" || userId.startsWith("admin-") ? "admin" : "user";
+    }
+
+    if (adminEmail) {
+      const [user] = await db.select({ email: users.email }).from(users).where(eq(users.id, userId)).limit(1);
+      if (user?.email?.toLowerCase() === adminEmail) {
+        return "admin";
+      }
+    }
+
     const [record] = await db.select({ role: userRoles.role }).from(userRoles).where(eq(userRoles.userId, userId)).limit(1);
     return record?.role ?? "user";
   } catch (error) {

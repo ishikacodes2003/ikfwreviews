@@ -43,8 +43,30 @@ function LoginForm() {
         </div>
         <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
           {mode === "sign-up" ? <label className="block text-xs font-bold text-zinc-700">Name<input autoFocus required autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} className="mt-1.5 h-10 w-full rounded border border-zinc-300 px-3 text-sm outline-none focus:border-black" /></label> : null}
-          <label className="block text-xs font-bold text-zinc-700">Email<input autoFocus={mode === "sign-in"} required type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} className="mt-1.5 h-10 w-full rounded border border-zinc-300 px-3 text-sm outline-none focus:border-black" /></label>
-          <label className="block text-xs font-bold text-zinc-700">Password<input required minLength={8} type="password" autoComplete={mode === "sign-in" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} className="mt-1.5 h-10 w-full rounded border border-zinc-300 px-3 text-sm outline-none focus:border-black" /></label>
+          <label className="block text-xs font-bold text-zinc-700">
+            {mode === "sign-in" ? "Email or Username" : "Email"}
+            <input
+              autoFocus={mode === "sign-in"}
+              required
+              type={mode === "sign-in" ? "text" : "email"}
+              autoComplete={mode === "sign-in" ? "username" : "email"}
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              className="mt-1.5 h-10 w-full rounded border border-zinc-300 px-3 text-sm outline-none focus:border-black"
+            />
+          </label>
+          <label className="block text-xs font-bold text-zinc-700">
+            Password
+            <input
+              required
+              minLength={mode === "sign-up" ? 8 : undefined}
+              type="password"
+              autoComplete={mode === "sign-in" ? "current-password" : "new-password"}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="mt-1.5 h-10 w-full rounded border border-zinc-300 px-3 text-sm outline-none focus:border-black"
+            />
+          </label>
           {error ? <p className="rounded bg-red-50 p-2 text-xs text-red-700">{error}</p> : null}
           <Button disabled={submitting} className="h-10 w-full bg-black text-white">{submitting ? "Please wait…" : mode === "sign-in" ? "Sign in" : "Create account"}</Button>
         </form>

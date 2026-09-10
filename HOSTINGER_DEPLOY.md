@@ -16,8 +16,10 @@ Set these in the Hostinger Node.js application environment:
 - `DATABASE_URL=mysql://USERNAME:PASSWORD@HOST:3306/DATABASE_NAME`
 - `DB_CONNECTION_LIMIT=10`
 - `ADMIN_EMAIL=your-admin-email@example.com`
+- `ADMIN_PASSWORD=your-secure-admin-password`
+- `ADMIN_USERNAME=admin` (optional, defaults to "admin")
 
-If the password contains special URL characters, URL-encode it.
+If the database password contains special URL characters, URL-encode it.
 
 ## 4. Build/runtime
 - Install command: `npm install`
@@ -27,8 +29,8 @@ If the password contains special URL characters, URL-encode it.
 
 The app is a Next.js SSR application and should be deployed as a Node.js web application, not as a static export.
 
-## 5. First admin account
-Set `ADMIN_EMAIL` to the email you want to use for the admin account before signing up. When that email creates its first account, the app creates the corresponding `user_roles` row with the `admin` role.
+## 5. Admin account authentication
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in your environment. You can directly log in at `/login` using either your admin email or admin username along with your admin password. The application will automatically provision and maintain the admin user in MySQL with the `admin` role. Manual sign-up is not required.
 
 ## 6. Authentication change
 The project no longer depends on Neon Auth. It now uses a small application-owned session system backed by the same Hostinger MySQL database. Passwords are hashed with Node.js `scrypt`; sessions are stored server-side and identified by an HttpOnly cookie.
