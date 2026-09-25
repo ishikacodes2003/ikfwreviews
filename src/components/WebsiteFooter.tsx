@@ -109,11 +109,29 @@ export function WebsiteFooter() {
               </li>
               <li>
                 <Link
-                  href="/guides/how-to-read-ikfw-reviews"
+                  href="/guides"
                   className="inline-flex items-center gap-1.5 text-zinc-400 transition-all duration-150 hover:translate-x-1 hover:text-white"
                 >
                   <ChevronRight className="h-3.5 w-3.5 text-zinc-600" />
-                  <span>Parent Evaluation Guide</span>
+                  <span>Parent Guides Hub</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/guides/is-ikfw-genuine"
+                  className="inline-flex items-center gap-1.5 text-zinc-400 transition-all duration-150 hover:translate-x-1 hover:text-white"
+                >
+                  <ChevronRight className="h-3.5 w-3.5 text-zinc-600" />
+                  <span>Is IKFW Genuine?</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/guides/ikfw-auditions-and-fees"
+                  className="inline-flex items-center gap-1.5 text-zinc-400 transition-all duration-150 hover:translate-x-1 hover:text-white"
+                >
+                  <ChevronRight className="h-3.5 w-3.5 text-zinc-600" />
+                  <span>Auditions &amp; Fees</span>
                 </Link>
               </li>
             </ul>

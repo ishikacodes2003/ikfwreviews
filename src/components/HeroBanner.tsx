@@ -7,7 +7,7 @@ export function HeroBanner() {
   return (
     <section className="relative h-[360px] overflow-hidden bg-black max-sm:h-[158px]">
       <Image
-        src="/kids-fashion-reference.png"
+        src="/kids-fashion-reference.webp"
         alt="Children on a Kids Fashion Week runway"
         fill
         priority

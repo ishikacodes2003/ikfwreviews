@@ -39,12 +39,36 @@ export default async function Home() {
 
   const schema = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "IKFW Reviews – India Kids Fashion Week Reviews",
-    description: SITE_DESCRIPTION,
-    url: absoluteUrl("/"),
-    isPartOf: { "@id": `${absoluteUrl("/")}#website` },
-    about: { "@type": "Thing", name: "IKFW Reviews" },
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${absoluteUrl("/")}#webpage`,
+        name: "IKFW Reviews – India Kids Fashion Week Reviews",
+        description: SITE_DESCRIPTION,
+        url: absoluteUrl("/"),
+        isPartOf: { "@id": `${absoluteUrl("/")}#website` },
+        about: { "@id": `${absoluteUrl("/")}#event` },
+      },
+      {
+        "@type": "Event",
+        "@id": `${absoluteUrl("/")}#event`,
+        name: "India Kids Fashion Week",
+        description: SITE_DESCRIPTION,
+        url: absoluteUrl("/"),
+        image: absoluteUrl("/kids-fashion-reference.jpg"),
+        ...(stats.totalReviews > 0
+          ? {
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: stats.averageRating.toFixed(1),
+                reviewCount: stats.totalReviews,
+                bestRating: "5",
+                worstRating: "1",
+              },
+            }
+          : {}),
+      },
+    ],
   };
 
   return (

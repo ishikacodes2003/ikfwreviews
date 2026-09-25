@@ -31,21 +31,42 @@ export default async function ReviewsIndexPage() {
   ]);
   const latest = [...reviews].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 24);
 
+  const stats = reviews.length > 0 ? {
+    totalReviews: reviews.length,
+    averageRating: Number((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)),
+  } : null;
+
   const schema = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "IKFW Reviews – Parent Reviews & Ratings",
-    url: absoluteUrl("/reviews"),
-    mainEntity: {
-      "@type": "ItemList",
-      numberOfItems: reviews.length,
-      itemListElement: latest.map((review, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        url: absoluteUrl(`/reviews/${encodeURIComponent(review.id)}`),
-        name: `${review.season || "India Kids Fashion Week"} review by ${review.parentName}`,
-      })),
-    },
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: "IKFW Reviews – Parent Reviews & Ratings",
+        url: absoluteUrl("/reviews"),
+        mainEntity: {
+          "@type": "ItemList",
+          numberOfItems: reviews.length,
+          itemListElement: latest.map((review, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: absoluteUrl(`/reviews/${encodeURIComponent(review.id)}`),
+            name: `${review.season || "India Kids Fashion Week"} review by ${review.parentName}`,
+          })),
+        },
+      },
+      ...(stats ? [{
+        "@type": "Event",
+        name: "India Kids Fashion Week",
+        url: absoluteUrl("/"),
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: stats.averageRating.toFixed(1),
+          reviewCount: stats.totalReviews,
+          bestRating: "5",
+          worstRating: "1",
+        },
+      }] : []),
+    ],
   };
 
   return (

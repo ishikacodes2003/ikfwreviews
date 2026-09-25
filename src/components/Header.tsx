@@ -207,8 +207,8 @@ export function Header() {
                     </div>
                   ) : null}
                 </div>
-                <Link href="/guides/how-to-read-ikfw-reviews" onClick={() => setMenuOpen(false)}>
-                  Parent Guide
+                <Link href="/guides" onClick={() => setMenuOpen(false)}>
+                  Parent Guides
                 </Link>
                 <Link href="/about" onClick={() => setMenuOpen(false)}>
                   About

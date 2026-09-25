@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="112" fill="#09090B"/>
+  <rect x="16" y="16" width="480" height="480" rx="96" stroke="#27272A" stroke-width="8"/>
+  <!-- Golden Star -->
+  <path d="M256 96L288.75 196.79L394.72 196.79L308.98 259.08L341.74 359.88L256 297.58L170.26 359.88L203.02 259.08L117.28 196.79L223.25 196.79L256 96Z" fill="url(#star-grad)"/>
+  <!-- IKFW Typography -->
+  <text x="256" y="432" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="74" font-weight="900" letter-spacing="4">IKFW</text>
+  <defs>
+    <linearGradient id="star-grad" x1="256" y1="96" x2="256" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+</svg>
